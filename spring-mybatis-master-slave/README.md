@@ -119,6 +119,6 @@ CREATE SCHEMA IF NOT EXISTS demo_ds_slave_1;
 为了方便测试,直接启动一个spring容器,执行service方法,运行程序之后的结果为:
 
 第一次执行报错,因为 sharding sphere 不支持 主库和从库的数据同步 ,执行查询操作的时候从库没有表和数据,所以报异常：
-
+![image](https://raw.githubusercontent.com/Clever-Wang/sharding-sphere-demo/master/spring-mybatis-master-slave/a112.png)
 然后执行 db.sql 中的语句 到两个从库,再次执行程序,就可以了,因为没有做主从数据同步,所以主库数据无论怎么改变,查询到从库的数据一致是那些数据。
-
+![image](https://github.com/Clever-Wang/sharding-sphere-demo/blob/master/spring-mybatis-master-slave/a123.png?raw=true)
