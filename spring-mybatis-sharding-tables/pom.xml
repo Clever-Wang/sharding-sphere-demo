@@ -185,7 +185,7 @@
                         <addClasspath>true</addClasspath>
                         <classpathPrefix>lib</classpathPrefix>
                         <!-- 程序启动入口 -->
-                        <mainClass>com.wsc.sharding.example.databases.Application</mainClass>
+                        <mainClass>com.wsc.sharding.example.tables.Application</mainClass>
                     </manifest>
                     <manifestEntries>
                     	<!-- 将lib包抽到上一层文件夹中, classpathPrefix属性是包名-->
