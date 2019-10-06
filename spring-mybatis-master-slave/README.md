@@ -118,7 +118,20 @@ CREATE SCHEMA IF NOT EXISTS demo_ds_slave_1;
 
 为了方便测试,直接启动一个spring容器,执行service方法,运行程序之后的结果为:
 
-第一次执行报错,因为 sharding sphere 不支持 主库和从库的数据同步 ,执行查询操作的时候从库没有表和数据,所以报异常：
+1.执行后发现,在插入数据完成之后,可以查询到数据,查看sql语句发现走的是主库
+![image](https://raw.githubusercontent.com/Clever-Wang/sharding-sphere-demo/master/spring-mybatis-master-slave/a111.png)
+2.在service层方法执行完成之后,main方法内 再次打印数据,发现报错,因为 sharding sphere 不支持 主库和从库的数据同步 ,执行查询操作的时候从库没有表和数据,所以报异常：
 ![image](https://raw.githubusercontent.com/Clever-Wang/sharding-sphere-demo/master/spring-mybatis-master-slave/a112.png)
-然后执行 db.sql 中的语句 到两个从库,再次执行程序,就可以了,因为没有做主从数据同步,所以主库数据无论怎么改变,查询到从库的数据一直是那些数据。
+3.然后执行 db.sql 中的语句 到两个从库,再次执行程序,就可以了,因为没有做主从数据同步,所以主库数据无论怎么改变,查询到从库的数据一直是那些数据。
 ![image](https://github.com/Clever-Wang/sharding-sphere-demo/blob/master/spring-mybatis-master-slave/a123.png?raw=true)
+
+**结果如下：**
+在一个事务方法中，查询sql默认会走slave库,但是一旦遇到insert/update/delete语句，就会设置一个查询主库的标志，isMasterRoute()==true，这时候，Connection为主库的连接，并且引擎会强制设置DML_FLAG的值为true， 而这个对象是存在ThreadLocal中的，那么这样一个请求后续的所有读操作都会走主库。
+事务方法执行完成之后,AOP结束后会清除 ThreadLocal 中的属性 后续的查询操作会走 从库。
+
+有些时候，我们想强制走主库，这时候在请求最开始执行Hint操作即可，如下所示：
+
+```sql
+HintManager hintManager = HintManager.getInstance();
+hintManager.setMasterRouteOnly();
+```

@@ -26,8 +26,10 @@ public class Application {
 			commonService.initEnvironment();
 			//插入数据
 			commonService.process();
-			//打印数据
+			//打印数据,main方法中打印走从库
+			logger.info("-------------- main方法中开始执行查询操作 -------------- ");
 			commonService.printData();
+			logger.info("-------------- main方法中执行查询操作结束 -------------- ");
 		}catch (Throwable e) {
 			logger.error(" spring-mybatis-sharding-databases start fail ",e);
 			System.exit(0);
