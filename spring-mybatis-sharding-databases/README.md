@@ -2,15 +2,15 @@
 
 ### 1.资源介绍
 
-共两个数据库: 
+**共两个数据库:**
 
 `demo_ds_0` 和 `demo_ds_1` 
 
-共4张表: 
+**共4张表:** 
 
 `demo_ds_0.t_order` 、`demo_ds_0.t_order_item` 和 `demo_ds_1.t_order` 、`demo_ds_1.t_order_item`
 
-分库规则: 
+**分库规则:** 
 
 根据用户id 取模之后插入 `demo_ds_0` 或者 `demo_ds_1`
 
