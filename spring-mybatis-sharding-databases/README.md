@@ -1,17 +1,6 @@
 # 第一节: 入门demo使用spring+mybatis分库
 
-### 1.执行src/main/resources/db.sql
-
-执行sql创建数据库
-
-```sql
-DROP SCHEMA IF EXISTS demo_ds_0;
-DROP SCHEMA IF EXISTS demo_ds_1;
-CREATE SCHEMA IF NOT EXISTS demo_ds_0;
-CREATE SCHEMA IF NOT EXISTS demo_ds_1;
-```
-
-### 2.配置src/main/resources/spring/application-sharding-databases.xml
+### 1.资源介绍
 
 共两个数据库: 
 
@@ -24,6 +13,20 @@ CREATE SCHEMA IF NOT EXISTS demo_ds_1;
 分库规则: 
 
 根据用户id 取模之后插入 `demo_ds_0` 或者 `demo_ds_1`
+
+
+### 2.执行src/main/resources/db.sql
+
+执行sql创建数据库
+
+```sql
+DROP SCHEMA IF EXISTS demo_ds_0;
+DROP SCHEMA IF EXISTS demo_ds_1;
+CREATE SCHEMA IF NOT EXISTS demo_ds_0;
+CREATE SCHEMA IF NOT EXISTS demo_ds_1;
+```
+
+### 3.配置src/main/resources/spring/application-sharding-databases.xml
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -123,7 +126,7 @@ CREATE SCHEMA IF NOT EXISTS demo_ds_1;
 </beans>
 ```
 
-### 3.运行程序测试结果
+### 4.运行程序测试结果
 
 为了方便测试,直接启动一个spring容器,执行service方法,运行程序之后的结果为:
 
