@@ -1,7 +1,9 @@
 # 第一节: 入门demo使用spring+mybatis分库
 
-###1.执行src/main/resources/db.sql
+### 1.执行src/main/resources/db.sql
+
 执行sql创建数据库
+
 ```sql
 DROP SCHEMA IF EXISTS demo_ds_0;
 DROP SCHEMA IF EXISTS demo_ds_1;
@@ -9,12 +11,19 @@ CREATE SCHEMA IF NOT EXISTS demo_ds_0;
 CREATE SCHEMA IF NOT EXISTS demo_ds_1;
 ```
 
-###2.配置src/main/resources/spring/application-sharding-databases.xml
-共两个数据库: `demo_ds_0` 和 `demo_ds_1` 
+### 2.配置src/main/resources/spring/application-sharding-databases.xml
 
-共4张表: `demo_ds_0.t_order` 、`demo_ds_0.t_order_item` 和 `demo_ds_1.t_order` 、`demo_ds_1.t_order_item`
+共两个数据库: 
 
-分库规则: 根据用户id 取模之后插入 `demo_ds_0` 或者 `demo_ds_1`
+`demo_ds_0` 和 `demo_ds_1` 
+
+共4张表: 
+
+`demo_ds_0.t_order` 、`demo_ds_0.t_order_item` 和 `demo_ds_1.t_order` 、`demo_ds_1.t_order_item`
+
+分库规则: 
+
+根据用户id 取模之后插入 `demo_ds_0` 或者 `demo_ds_1`
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -114,7 +123,8 @@ CREATE SCHEMA IF NOT EXISTS demo_ds_1;
 </beans>
 ```
 
-###3.运行程序测试结果
+### 3.运行程序测试结果
+
 为了方便测试,直接启动一个spring容器,执行service方法,运行程序之后的结果为:
 
 用户id为奇数,则插入 `demo_ds_1` 。
