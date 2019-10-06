@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:context="http://www.springframework.org/schema/context" 
-    xmlns:tx="http://www.springframework.org/schema/tx" 
-    xmlns:sharding="http://shardingsphere.apache.org/schema/shardingsphere/sharding"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
-                        http://www.springframework.org/schema/beans/spring-beans.xsd 
-                        http://www.springframework.org/schema/tx 
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:sharding="http://shardingsphere.apache.org/schema/shardingsphere/sharding"
+       xmlns:bean="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                        http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/tx
                         http://www.springframework.org/schema/tx/spring-tx.xsd
-                        http://www.springframework.org/schema/context 
+                        http://www.springframework.org/schema/context
                         http://www.springframework.org/schema/context/spring-context.xsd
                         http://shardingsphere.apache.org/schema/shardingsphere/sharding
-                        http://shardingsphere.apache.org/schema/shardingsphere/sharding/sharding.xsd">
+                        http://shardingsphere.apache.org/schema/shardingsphere/sharding/sharding.xsd
+                        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
     <!-- 扫描包 -->
     <context:component-scan base-package="com.wsc.sharding.example.databases" />
@@ -43,13 +45,18 @@
     -->
     <sharding:inline-strategy id="databaseStrategy" sharding-column="user_id" algorithm-expression="demo_ds_${user_id % 2}" />
 
+    <bean:properties id="properties">
+        <!-- 使用SNOWFLAKE算法，需要配置worker.id与max.tolerate.time.difference.milliseconds属性 -->
+        <prop key="worker.id">123</prop>
+        <prop key="max.tolerate.time.difference.milliseconds">0</prop>
+    </bean:properties>
     <!--
     分布式主键生成策略
     column 自增列名称
     type   自增列值生成器类型，可自定义或选择内置类型：SNOWFLAKE/UUID
     -->
-    <sharding:key-generator id="orderKeyGenerator" type="SNOWFLAKE" column="order_id" />
-    <sharding:key-generator id="itemKeyGenerator" type="SNOWFLAKE" column="order_item_id" />
+    <sharding:key-generator id="orderKeyGenerator" type="SNOWFLAKE" column="order_id" props-ref="properties"/>
+    <sharding:key-generator id="itemKeyGenerator" type="SNOWFLAKE" column="order_item_id" props-ref="properties"/>
 
     <sharding:data-source id="shardingDataSource">
         <!-- 数据源Bean列表，多个Bean以逗号分隔 -->
@@ -63,6 +70,10 @@
                 <sharding:table-rule logic-table="t_order" database-strategy-ref="databaseStrategy" key-generator-ref="orderKeyGenerator" />
                 <sharding:table-rule logic-table="t_order_item" database-strategy-ref="databaseStrategy" key-generator-ref="itemKeyGenerator" />
             </sharding:table-rules>
+            <!-- 绑定表规则 -->
+            <sharding:binding-table-rules>
+                <sharding:binding-table-rule logic-tables="t_order,t_order_item"/>
+            </sharding:binding-table-rules>
         </sharding:sharding-rule>
     </sharding:data-source>
 
