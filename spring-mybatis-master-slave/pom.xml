@@ -17,7 +17,7 @@
         <fastjson.version>1.2.31</fastjson.version>
         <!--spring版本-->
         <spring.version>4.3.20.RELEASE</spring.version>
-        <tomcat.version>8.5.38</tomcat.version>
+        <tomcat.version>9.0.35</tomcat.version>
         <sharding-sphere.version>4.0.0-RC2</sharding-sphere.version>
     </properties>
     
